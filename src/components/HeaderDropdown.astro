@@ -1,0 +1,55 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import HeaderLink from './HeaderLink.astro';
+type Props = HTMLAttributes<'button'> & {
+    schema: Record<string, string>[]
+};
+
+const { schema, class: className, ...props } = Astro.props;
+
+const { pathname } = Astro.url;
+const subpath = pathname.match(/[^\/]+/g);
+// const isActive = href === pathname || href === '/' + subpath?.[0];
+---
+<div class="menu-wrapper">
+    <button id="worksMenuToggle" class:list={[className]} {...props}><slot/></button>
+    <ul class="menu">
+        {schema.map(({ text, link }) => <HeaderLink dropdownItem href={link}>{text}</HeaderLink>)}
+    </ul>
+</div>
+<style>
+	button {
+        display: inline-block;
+        background: none;
+        border: unset;
+        font-size: inherit;
+        padding: 1em 0.5em;
+    }
+    .menu-wrapper {
+        position: relative;
+        height: 100%;
+        border-bottom: 4px solid transparent;
+        display: inline-block;
+        text-decoration: 1px solid transparent;
+    }
+    .menu {
+        display: none;
+    }
+    .menu.active {
+        background-color: white;
+        margin: 0;
+        padding: 0.5ch 1ch;
+        display: flex;
+        flex-flow: column;
+        position: absolute;
+        top: 100%;
+        left: -1ch;
+        min-width: max-content;
+    }
+</style>
+<script>
+    const menuToggle = document.getElementById('worksMenuToggle');
+    menuToggle?.addEventListener('click', () => {
+        menuToggle.closest('.menu-wrapper')?.querySelector('.menu')?.classList.toggle('active');
+    })
+</script>
