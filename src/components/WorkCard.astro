@@ -11,14 +11,16 @@ interface Props {
 
 const { name, id, qty, requested, requestedTimes, lastUpdated } = Astro.props;
 const formatter = new Intl.DateTimeFormat('en-US', { dateStyle: 'short' });
+// @ts-ignore
 const hasEntry = await getEntry('works', id);
 ---
 <article id={`work-${id}`}>
     <h2>{name}</h2>
     <p><b>Total works:</b> {qty}</p>
-    <p><b>Been asked for:</b> {requested ? `${requestedTimes} time${requestedTimes > 1 ? 'times' : 'time'}` : 'No'}</p>
+    <p><b>Been asked for:</b> {requested ? `${requestedTimes} time${requestedTimes > 1 ? 's' : ''}` : 'No'}</p>
     <p><b>Last checked:</b> {formatter.format(lastUpdated)}</p>
     {hasEntry && <a href={`works/${id}`}>View work</a>}
+    {import.meta.env.DEV && <output id="debug">{JSON.stringify({ name, id, requested, requestedTimes, lastUpdated })}</output>}
 </article>
 <style>
     h2 {
