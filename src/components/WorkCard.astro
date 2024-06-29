@@ -1,0 +1,41 @@
+---
+import { getEntry } from 'astro:content';
+interface Props {
+    id: number;
+    name: string;
+    qty: number;
+    requested: boolean;
+    requestedTimes: number;
+    lastUpdated: Date;
+}
+
+const { name, id, qty, requested, requestedTimes, lastUpdated } = Astro.props;
+const formatter = new Intl.DateTimeFormat('en-US', { dateStyle: 'short' });
+const hasEntry = await getEntry('works', id);
+---
+<article id={`work-${id}`}>
+    <h2>{name}</h2>
+    <p><b>Total works:</b> {qty}</p>
+    <p><b>Been asked for:</b> {requested ? `${requestedTimes} time${requestedTimes > 1 ? 'times' : 'time'}` : 'No'}</p>
+    <p><b>Last checked:</b> {formatter.format(lastUpdated)}</p>
+    {hasEntry && <a href={`works/${id}`}>View work</a>}
+</article>
+<style>
+    h2 {
+        font-size: 1.75rem;
+    }
+    article {
+        background-color: #fff;
+        padding: 1ch 1.5ch;
+        border: 1px solid #e2e3e5;
+        border-radius: 10px;
+    }
+    article {
+        position: relative;
+    }
+    a::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+    }
+</style>

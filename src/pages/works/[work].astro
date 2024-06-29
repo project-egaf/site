@@ -1,0 +1,48 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { db, Works } from 'astro:db';
+import { getEntry, type CollectionEntry } from 'astro:content';
+import RequestForm from '../../components/RequestForm.astro';
+
+interface Props {
+    name: string;
+    lastUpdated: Date;
+    qty: number;
+    requested: boolean;
+    requestedTimes: number;
+    id: number;
+    meta: CollectionEntry<'works'>
+}
+
+export async function getStaticPaths() {
+    const works = await db.select().from(Works)
+
+    return await Promise.all(works.map(async work => {
+    
+        // @ts-ignore
+        const workPost = await getEntry('works', work.id);
+        const props = {
+            ...work,
+            meta: workPost
+        }
+    
+        return {
+            params: { work: work.id, slug: workPost?.slug ?? "Work information not found", id: ''+work.id },
+            props
+        }
+    }));
+}
+
+const { name, id, lastUpdated, qty, requested, requestedTimes, meta } = Astro.props;
+const { Content, headings } = await meta.render();
+---
+<Layout>
+    <h1>{name}</h1>
+    <ul>
+        <li>Last checked: {lastUpdated}</li>
+        <li>Total works: {qty}</li>
+        <li>Been requested: {!requested ? 'No' : `${requestedTimes} time${requestedTimes > 1 ? 's' : ''}`}</li>
+    </ul>
+    <Content />
+    <RequestForm workId={+id} />
+</Layout>
