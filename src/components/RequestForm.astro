@@ -1,0 +1,27 @@
+---
+import { actions } from 'astro:actions';
+
+
+interface Props {
+    workId: number;
+}
+const { workId } = Astro.props;
+console.log(workId);
+---
+<form method="POST" id="requestForm">
+    <h2>Want to see this something in this fandom?</h2>
+    <input type="hidden" name="id" value={workId} />
+    <input type="submit" value="YES!" />
+</form>
+<script>
+    import { actions } from 'astro:actions';
+
+    const form = document.getElementById('requestForm')! as HTMLFormElement;
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const fd = new FormData(form);
+        const result = await actions.bounty(fd);
+        console.log(result);
+    });
+</script>
