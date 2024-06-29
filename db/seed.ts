@@ -17,6 +17,7 @@ export default async function seed() {
 		lastUpdated: new Date(),
 		requested: false,
 		requestedTimes: 0,
+		category: 0,
 		qty: 1,
 	});
 
@@ -26,6 +27,7 @@ export default async function seed() {
 		lastUpdated: new Date(),
 		requested: false,
 		requestedTimes: 0,
+		category: 0,
 		qty: 1,
 		description: '# Chicchana Mune Tokimeki (Anime)\n An anime series with 1 work'
 	});
@@ -36,6 +38,7 @@ export default async function seed() {
 		lastUpdated: new Date(),
 		requested: false,
 		requestedTimes: 0,
+		category: 0,
 		qty: 1,
 		description: ''
 	})
