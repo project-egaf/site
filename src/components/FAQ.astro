@@ -1,0 +1,39 @@
+---
+interface Props {
+    q: string;
+    open?: boolean
+}
+const { q, open } = Astro.props;
+---
+<details open={open}>
+    <summary>&nbsp;{q}</summary>
+    <slot />
+</details>
+<style>
+    details {
+        container-type: inline-size;
+    }
+    summary {
+        font-family: 'Courier New', Courier, monospace;
+        font-size: clamp(1rem, 3.5cqi, 2rem);
+        font-weight: 700;
+        text-wrap: pretty;
+        cursor: pointer;
+        list-style: none;
+
+        &::before {
+            content: '??';
+            font-weight: 700;
+        }
+    }
+    details[open] summary::before {
+        content: '!!'
+    }
+    summary > * {
+        display: inline;
+    }
+    summary::-webkit-details-marker {
+        display: none;
+    }
+    
+</style>

@@ -1,0 +1,70 @@
+---
+import Layout from '../layouts/Layout.astro';
+import FAQ from '../components/FAQ.astro';
+---
+<Layout>
+    <h1>Frequently Asked Questions</h1>
+    <div class="flex-col">
+        <FAQ q="What works need adding to?" >
+            <p>You can find the works currently looking for a work at </p>
+        </FAQ>
+        <FAQ q="Is any work of fiction more important than others?" >
+            <p>No, the goal is to get people writing. Don't know the fandom? Look it up! Aren't interested in writing about a romance manga? There's plenty of other works to find!</p>
+        </FAQ>
+        <FAQ q="I'm not a good writer" >
+            <p>Who cares?</p>
+            <p>Excuse me while I list of banalities that you've heard a thousand times as attempts to encourage you to write.</p>
+            <ul>
+                <li>You should write for the sake of writing</li>
+                <li>No one likes their own work</li>
+                <li>Beauty is in the eye of the beholder</li>
+                <li>Good is subjective</li>
+                <li>The only way to get better at something is to do it for 50,000 hours, may as well start now</li>
+            </ul>
+        </FAQ>
+        <FAQ q="What incentive are you giving me to write?" >
+            <p>Um, the feeling of a job well done?</p>
+            <p>No?</p>
+            <p>Fine, what if your work got featured if it helped with certain milestones?</p>
+        </FAQ>
+        <FAQ q="Is there any limitations on getting featured?" >
+            <p>This is just an idea that I'm floating as I'm writing up the idea for this project. So here's my mental flow as to what could exclude something from being included:</p>
+            <ul>
+                <li>Non-Con/Underage: This is run by only a few people, featuring those kinds of works could jeopardize the project.</li>
+                <li>Quality: You wrote your work! Congrats! Oh, it's 100 words? You didn't spell the main character's name correctly?</li>
+                <li>Rating: Explicit works would be harder to feature, but <a href="https://archiveofourown.org/works/16876149">as the most popular rating to read</a>, it would be silly to <em>exclude</em> them entirely.</li>
+            </ul>
+        </FAQ>
+        <FAQ q="Trans rights?" >
+            <p><b>TRANS RIGHTS ARE HUMAN RIGHTS</b></p>
+        </FAQ>
+        <FAQ q="You didn't answer my question?">
+            <p>Have a question that hasn't been answered here? Then you can get in contact with us on the GitHub Repo for this project. We may setup a better way to interact with members in the future, but for now that is easiest.</p>
+        </FAQ>
+    </div>
+</Layout>
+<script>
+    const details = Array.from(document.querySelectorAll('details'));
+    const handler = {
+        handleEvent({ target }: { target: HTMLDetailsElement }) {
+            if (!target.hasAttribute('open')) return;
+            
+            for (const notTarget of details.filter(detail => !Object.is(detail, target))) {
+                console.log(notTarget, target, Object.is(target, notTarget));
+                notTarget.removeAttribute('open');
+            }
+        }
+    }
+
+    details.forEach(el => {
+        // @ts-ignore
+        el.addEventListener('toggle', handler);
+    })
+</script>
+<style>
+    .flex-col {
+        display: flex;
+        flex-flow: column;
+        gap: 3ch;
+    }
+</style>
