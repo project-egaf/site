@@ -1,0 +1,27 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { db, Works, eq } from 'astro:db';
+import WorkCard from '../components/WorkCard.astro';
+const works = await db.select().from(Works);
+
+---
+<Layout>
+    <h1>Fandoms with 1 work: </h1>
+    <ul role="list">
+        {works.map(work => <li><WorkCard {...work} /></li>)}
+    </ul>
+</Layout>
+<style>
+    ul {
+        display: flex;
+        flex-flow: column;
+        gap: 2ch;
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+    }
+    li {
+        margin: 0;
+        padding: 0;
+    }
+</style>
