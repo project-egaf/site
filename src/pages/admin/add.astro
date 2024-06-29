@@ -1,0 +1,64 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { Categories } from '../../consts';
+
+const now = (new Date()).toString();
+
+let cat:keyof typeof Categories;
+
+const options = [];
+for (const cat in Categories) {
+    
+    if (+cat === +cat) {
+        options.push([cat, Categories[cat]])
+    }
+}
+---
+<Layout>
+    <form method="POST">
+        <label for="name">Name</label>
+        <input name="name" id="name" />
+        <label for="qty">Amount of existing works</label>
+        <input type="text" inputmode="numeric" id="qty" name="qty" value="1" />
+        <label for="category">Category</label>
+        <select name="category" id="category">{options.map(([value, label]) => <option value={value}>{label}</option>)}</select>
+        <label for="description">Description (Use Markdown)</label>
+        <textarea name="description" id="description"></textarea>
+        <input type="submit" value="Add" id="submit" />
+        <input name="lastUpdated" type="hidden" value={now} />
+        <input name="createdon" type="hidden" value={now} />
+        <input type="hidden" name="requested" value="false" />
+        <input type="hidden" name="requestedTimes" value="0" />
+    </form>
+</Layout>
+<style>
+    form {
+        display: flex;
+        flex-flow: column;
+        gap: 1ch;
+    }
+</style>
+<script>
+    import { actions } from 'astro:actions';
+
+    const form = document.querySelector<HTMLFormElement>('form')!;
+    const submit = document.querySelector<HTMLInputElement>('#submit')!;
+
+    let handle:NodeJS.Timeout|null = null;
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const fd = new FormData(form);
+        const { success, error } = await actions.addWork(fd);
+
+        if (success) {
+            form.reset();
+            submit.value = 'Added!';
+            if (handle) clearTimeout(handle);
+            handle = setTimeout(() => {
+                submit.value = 'Add'
+            }, 2500)
+        } else {
+            alert(error)
+        }
+    })
+</script>
