@@ -1,0 +1,23 @@
+---
+import Layout from '../layouts/Layout.astro'
+import { db, Works, count } from 'astro:db';
+import WorkCard from '../components/WorkCard.astro'
+import { TOTAL_WORKS_WITH_ONE_WORK } from '../consts';
+const [{ count: entryCount }] = await db.select({ count: count() }).from(Works);
+const worksEntered = await db.select().from(Works);
+const lastWorkEntered = worksEntered[worksEntered.length - 1];
+---
+<Layout>
+    <h1>Progress</h1>
+    <span>Last Updated: 6/29/24</span>
+    <p>So far there are {entryCount} of {TOTAL_WORKS_WITH_ONE_WORK} entered into Project EGAF.</p>
+    <progress value={entryCount} max={TOTAL_WORKS_WITH_ONE_WORK} />
+    <p>The last work added to our list was: {lastWorkEntered.name}</p>
+    <WorkCard {...lastWorkEntered} />
+    
+</Layout>
+<style>
+    progress {
+        width: 100%;
+    }
+</style>
